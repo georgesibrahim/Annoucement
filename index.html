@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Announcements</title>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'SF Pro', sans-serif;
+            margin: 0;
+            background-color: #f9fafa;
+            color: #333;
+        }
+        header {
+            background-color: #00AE8D;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            margin: 20px auto;
+            padding: 15px;
+            max-width: 900px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .announcement-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .announcement-header h2 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .announcement-header button {
+            background-color: #00AE8D;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        .announcement-header button:hover {
+            background-color: #00877e;
+        }
+        .card {
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fb;
+            border: 1px solid #e6e8eb;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .card h4 {
+            margin: 0 0 5px;
+            color: #00AE8D;
+            font-size: 1em;
+        }
+        .card p {
+            margin: 0 0 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .status {
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .status-scheduled {
+            color: #ff9800;
+        }
+        .status-posted {
+            color: #4caf50;
+        }
+        .viewers {
+            font-size: 0.8em;
+            text-align: right;
+            color: #333;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #333;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 8px;
+            font-size: 0.9em;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .modal-buttons button {
+            padding: 8px 16px;
+            font-size: 0.9em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .modal-buttons .cancel {
+            background: #ccc;
+            color: #333;
+        }
+        .modal-buttons .save {
+            background: #00AE8D;
+            color: #fff;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .announcement-header h2 {
+                font-size: 1em;
+            }
+            .announcement-header button {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+            .card {
+                padding: 10px;
+            }
+            .card h4 {
+                font-size: 0.9em;
+            }
+            .card p {
+                font-size: 0.8em;
+            }
+            .viewers {
+                font-size: 0.7em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="announcement-header">
+            <h2>All Announcements</h2>
+            <button onclick="openModal()">+ New Announcement</button>
+        </div>
+        <div id="announcementList">
+            <div class="card">
+                <h4>Test Rescheduled</h4>
+                <p>Due to unforeseen circumstances, the test has been rescheduled.</p>
+                <div class="status status-scheduled">Scheduled<br><small>Scheduled for: 2025-01-20 10:00 AM</small></div>
+                <div class="viewers">3 / 10 viewers</div>
+            </div>
+            <div class="card">
+                <h4>Project Meeting Reminder</h4>
+                <p>Don't forget about the upcoming project meeting this Friday.</p>
+                <div class="status status-posted">Posted</div>
+                <div class="viewers">7 / 10 viewers</div>
+            </div>
+            <div class="card">
+                <h4>System Downtime Notification</h4>
+                <p>The system will be down for maintenance on Saturday night.</p>
+                <div class="status status-scheduled">Scheduled<br><small>Scheduled for: 2025-01-22 11:00 PM</small></div>
+                <div class="viewers">2 / 10 viewers</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3>Create New Announcement</h3>
+            <div class="form-group">
+                <label for="project">Project</label>
+                <select id="project">
+                    <option value="">Select Project</option>
+                    <option value="Project A">Project A</option>
+                    <option value="Project B">Project B</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" placeholder="Enter title">
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" rows="4" placeholder="Enter message"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status">
+                    <option value="Posted">Posted</option>
+                    <option value="Scheduled">Scheduled</option>
+                </select>
+            </div>
+            <div class="form-group" id="scheduleDateGroup" style="display: none;">
+                <label for="scheduleDate">Schedule Date and Time</label>
+                <input type="datetime-local" id="scheduleDate">
+            </div>
+            <div class="modal-buttons">
+                <button class="cancel" onclick="closeModal()">Cancel</button>
+                <button class="save" onclick="saveAnnouncement()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modal');
+        const statusSelect = document.getElementById('status');
+        const scheduleDateGroup = document.getElementById('scheduleDateGroup');
+
+        function openModal() {
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        statusSelect.addEventListener('change', () => {
+            if (statusSelect.value === 'Scheduled') {
+                scheduleDateGroup.style.display = 'block';
+            } else {
+                scheduleDateGroup.style.display = 'none';
+            }
+        });
+
+        function saveAnnouncement() {
+            const project = document.getElementById('project').value;
+            const title = document.getElementById('title').value;
+            const message = document.getElementById('message').value;
+            const status = document.getElementById('status').value;
+            const scheduleDate = document.getElementById('scheduleDate').value;
+
+            if (!project || !title || !message || !status || (status === 'Scheduled' && !scheduleDate)) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            const announcementList = document.getElementById('announcementList');
+            const card = document.createElement('div');
+            card.classList.add('card');
+
+            let additionalInfo = '';
+            if (status === 'Scheduled') {
+                additionalInfo = `<br><small>Scheduled for: ${new Date(scheduleDate).toLocaleString()}</small>`;
+            }
+
+            card.innerHTML = `
+                <h4>${title}</h4>
+                <p>${message}</p>
+                <div class="status status-${status.toLowerCase()}">${status}${additionalInfo}</div>
+                <div class="viewers">0 / 9 viewers</div>
+            `;
+
+            announcementList.appendChild(card);
+            closeModal();
+        }
+    </script>
+</body>
+</html>
